@@ -60,7 +60,7 @@ create table PositionAllowances(
           references Allowances(AllowanceId)
 );
 
-create table Vehicles(
+create table Vechile(
           VechileId number(10) primary key,
           RegistrationNo number(20),
 Year number(4),
@@ -131,18 +131,19 @@ where Employees.EmployeeId = EmployeePosition.EmployeeId
 and EmployeePosition.PositionId = Positions.PositionId
 order by FirstName DESC;
 
-select MinSalary - MaxSalary from SalaryScales;
+select MaxSalary - MinSalary from SalaryScales;
 
-select * from Vehicles 
-where Color IN('red', 'blue', 'green')
-and upper(PositionName) LIKE '%r%';
+select * from Vechile, Positions
+where Vechile.PositionId = Positions.PositionId 
+and Color IN('red', 'blue', 'green')
+and lower(PositionName) LIKE '%r%';
 
 select Positions.PositionName 
 from Positions, Allowances, PositionAllowances
 where Positions.PositionId = PositionAllowances.PositionId
 and PositionAllowances.AllowanceId = Allowances.AllowanceId;
 
-delete from Vehicles where year = '2010';
+delete from Vechile where year = '2010';
 
 update Allowances set Amount = 5
     WHERE AllowanceId NOT IN (SELECT AllowanceId FROM PositionAllowances);
@@ -153,18 +154,18 @@ from SalaryScales, Positions
 where SalaryScales.ScaleCode = Positions.ScaleCode;
 
 CREATE or replace VIEW union_view AS
-select DBO from Employees 
+select DOB from Employees 
 UNION
 select StartDate from EmployeePosition;
 
-create synonyms emp from employees;
+create public synonym emp for employees;
 
-drop table SalaryScales;
+drop table Vehicles;
+drop table PositionAllowances;
+drop table EmployeePosition;
 drop table Employees;
 drop table Allowances;
 drop table Positions;
-drop table EmployeePosition;
-drop table PositionAllowances;
-drop table Vehicles;
+drop table SalaryScales;
 
 REVOKE All PRIVILEGES FROM dbfinal;
